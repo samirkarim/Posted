@@ -1,6 +1,6 @@
 # Posted
 
-A new Flutter project.
+A Flutterflow project for final year computer science
 
 ## Getting Started
 
