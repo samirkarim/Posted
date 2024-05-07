@@ -1,4 +1,4 @@
-package com.mycompany.posted
+package com.ethical.posted
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,0 +1,18 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "posts",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "community_ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "postCreationDateTime",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ]
+}
