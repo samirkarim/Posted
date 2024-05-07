@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "817642148734",
+    "project_id": "posted-qcestf",
+    "storage_bucket": "posted-qcestf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:817642148734:android:c4eca58991e7f28aeb992f",
+        "android_client_info": {
+          "package_name": "com.ethical.posted"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtYMl5efKA7FxMVJ4JoS6uwOJ9tFl9tkw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
