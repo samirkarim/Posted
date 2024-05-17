@@ -20,8 +20,20 @@ class AdminRecord extends FirestoreRecord {
   List<String> get usernames => _usernames ?? const [];
   bool hasUsernames() => _usernames != null;
 
+  // "ReportedPosts" field.
+  List<DocumentReference>? _reportedPosts;
+  List<DocumentReference> get reportedPosts => _reportedPosts ?? const [];
+  bool hasReportedPosts() => _reportedPosts != null;
+
+  // "ReportedComments" field.
+  List<DocumentReference>? _reportedComments;
+  List<DocumentReference> get reportedComments => _reportedComments ?? const [];
+  bool hasReportedComments() => _reportedComments != null;
+
   void _initializeFields() {
     _usernames = getDataList(snapshotData['Usernames']);
+    _reportedPosts = getDataList(snapshotData['ReportedPosts']);
+    _reportedComments = getDataList(snapshotData['ReportedComments']);
   }
 
   static CollectionReference get collection =>
@@ -71,11 +83,14 @@ class AdminRecordDocumentEquality implements Equality<AdminRecord> {
   @override
   bool equals(AdminRecord? e1, AdminRecord? e2) {
     const listEquality = ListEquality();
-    return listEquality.equals(e1?.usernames, e2?.usernames);
+    return listEquality.equals(e1?.usernames, e2?.usernames) &&
+        listEquality.equals(e1?.reportedPosts, e2?.reportedPosts) &&
+        listEquality.equals(e1?.reportedComments, e2?.reportedComments);
   }
 
   @override
-  int hash(AdminRecord? e) => const ListEquality().hash([e?.usernames]);
+  int hash(AdminRecord? e) => const ListEquality()
+      .hash([e?.usernames, e?.reportedPosts, e?.reportedComments]);
 
   @override
   bool isValidKey(Object? o) => o is AdminRecord;

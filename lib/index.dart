@@ -6,3 +6,4 @@ export '/create_post_community/create_post_community_widget.dart'
 export '/profile_page/profile_page_widget.dart' show ProfilePageWidget;
 export '/communities/communities_widget.dart' show CommunitiesWidget;
 export '/community/community_widget.dart' show CommunityWidget;
+export '/viewing_post/viewing_post_widget.dart' show ViewingPostWidget;

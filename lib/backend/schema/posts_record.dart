@@ -76,6 +76,11 @@ class PostsRecord extends FirestoreRecord {
   int get postLikesDislikesTotal => _postLikesDislikesTotal ?? 0;
   bool hasPostLikesDislikesTotal() => _postLikesDislikesTotal != null;
 
+  // "postComments" field.
+  List<DocumentReference>? _postComments;
+  List<DocumentReference> get postComments => _postComments ?? const [];
+  bool hasPostComments() => _postComments != null;
+
   void _initializeFields() {
     _postTitle = snapshotData['postTitle'] as String?;
     _postCreationDateTime = snapshotData['postCreationDateTime'] as DateTime?;
@@ -90,6 +95,7 @@ class PostsRecord extends FirestoreRecord {
     _postDislikes = getDataList(snapshotData['postDislikes']);
     _postLikesDislikesTotal =
         castToType<int>(snapshotData['postLikesDislikesTotal']);
+    _postComments = getDataList(snapshotData['postComments']);
   }
 
   static CollectionReference get collection =>
@@ -172,7 +178,8 @@ class PostsRecordDocumentEquality implements Equality<PostsRecord> {
         e1?.posterID == e2?.posterID &&
         e1?.hasImage == e2?.hasImage &&
         listEquality.equals(e1?.postDislikes, e2?.postDislikes) &&
-        e1?.postLikesDislikesTotal == e2?.postLikesDislikesTotal;
+        e1?.postLikesDislikesTotal == e2?.postLikesDislikesTotal &&
+        listEquality.equals(e1?.postComments, e2?.postComments);
   }
 
   @override
@@ -188,7 +195,8 @@ class PostsRecordDocumentEquality implements Equality<PostsRecord> {
         e?.posterID,
         e?.hasImage,
         e?.postDislikes,
-        e?.postLikesDislikesTotal
+        e?.postLikesDislikesTotal,
+        e?.postComments
       ]);
 
   @override

@@ -41,6 +41,11 @@ class CommentsRecord extends FirestoreRecord {
   int get commentLikesDislikesTotal => _commentLikesDislikesTotal ?? 0;
   bool hasCommentLikesDislikesTotal() => _commentLikesDislikesTotal != null;
 
+  // "commenter" field.
+  DocumentReference? _commenter;
+  DocumentReference? get commenter => _commenter;
+  bool hasCommenter() => _commenter != null;
+
   DocumentReference get parentReference => reference.parent.parent!;
 
   void _initializeFields() {
@@ -50,6 +55,7 @@ class CommentsRecord extends FirestoreRecord {
     _commentDislikes = getDataList(snapshotData['commentDislikes']);
     _commentLikesDislikesTotal =
         castToType<int>(snapshotData['commentLikesDislikesTotal']);
+    _commenter = snapshotData['commenter'] as DocumentReference?;
   }
 
   static Query<Map<String, dynamic>> collection([DocumentReference? parent]) =>
@@ -95,12 +101,14 @@ Map<String, dynamic> createCommentsRecordData({
   String? commentText,
   DateTime? createdDateTime,
   int? commentLikesDislikesTotal,
+  DocumentReference? commenter,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
       'commentText': commentText,
       'createdDateTime': createdDateTime,
       'commentLikesDislikesTotal': commentLikesDislikesTotal,
+      'commenter': commenter,
     }.withoutNulls,
   );
 
@@ -117,7 +125,8 @@ class CommentsRecordDocumentEquality implements Equality<CommentsRecord> {
         e1?.createdDateTime == e2?.createdDateTime &&
         listEquality.equals(e1?.commentLikes, e2?.commentLikes) &&
         listEquality.equals(e1?.commentDislikes, e2?.commentDislikes) &&
-        e1?.commentLikesDislikesTotal == e2?.commentLikesDislikesTotal;
+        e1?.commentLikesDislikesTotal == e2?.commentLikesDislikesTotal &&
+        e1?.commenter == e2?.commenter;
   }
 
   @override
@@ -126,7 +135,8 @@ class CommentsRecordDocumentEquality implements Equality<CommentsRecord> {
         e?.createdDateTime,
         e?.commentLikes,
         e?.commentDislikes,
-        e?.commentLikesDislikesTotal
+        e?.commentLikesDislikesTotal,
+        e?.commenter
       ]);
 
   @override

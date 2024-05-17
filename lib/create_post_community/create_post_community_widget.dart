@@ -479,6 +479,7 @@ class _CreatePostCommunityWidgetState extends State<CreatePostCommunityWidget>
                                             posterCreator: currentUserReference,
                                             posterID: currentUserUid,
                                             hasImage: false,
+                                            postLikesDislikesTotal: 1,
                                           ),
                                           ...mapToFirestore(
                                             {
@@ -505,6 +506,7 @@ class _CreatePostCommunityWidgetState extends State<CreatePostCommunityWidget>
                                             posterCreator: currentUserReference,
                                             posterID: currentUserUid,
                                             hasImage: false,
+                                            postLikesDislikesTotal: 1,
                                           ),
                                           ...mapToFirestore(
                                             {
@@ -534,7 +536,7 @@ class _CreatePostCommunityWidgetState extends State<CreatePostCommunityWidget>
                                         await postsRecordReference2.set({
                                           ...createPostsRecordData(
                                             postTitle: _model
-                                                .postCoummunityNameTextFieldTextController
+                                                .postTitleTextFieldTextController
                                                 .text,
                                             postBody: _model
                                                 .postBodyTextFieldTextController
@@ -546,6 +548,7 @@ class _CreatePostCommunityWidgetState extends State<CreatePostCommunityWidget>
                                             posterCreator: currentUserReference,
                                             posterID: currentUserUid,
                                             hasImage: true,
+                                            postLikesDislikesTotal: 1,
                                           ),
                                           ...mapToFirestore(
                                             {
@@ -561,7 +564,7 @@ class _CreatePostCommunityWidgetState extends State<CreatePostCommunityWidget>
                                             PostsRecord.getDocumentFromData({
                                           ...createPostsRecordData(
                                             postTitle: _model
-                                                .postCoummunityNameTextFieldTextController
+                                                .postTitleTextFieldTextController
                                                 .text,
                                             postBody: _model
                                                 .postBodyTextFieldTextController
@@ -573,6 +576,7 @@ class _CreatePostCommunityWidgetState extends State<CreatePostCommunityWidget>
                                             posterCreator: currentUserReference,
                                             posterID: currentUserUid,
                                             hasImage: true,
+                                            postLikesDislikesTotal: 1,
                                           ),
                                           ...mapToFirestore(
                                             {

@@ -1,8 +1,8 @@
 import '/flutter_flow/flutter_flow_util.dart';
-import 'community_widget.dart' show CommunityWidget;
+import 'viewing_post_widget.dart' show ViewingPostWidget;
 import 'package:flutter/material.dart';
 
-class CommunityModel extends FlutterFlowModel<CommunityWidget> {
+class ViewingPostModel extends FlutterFlowModel<ViewingPostWidget> {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();

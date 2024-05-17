@@ -5,7 +5,7 @@ service cloud.firestore {
       allow create: if true;
       allow read: if true;
       allow write: if true;
-      allow delete: if request.auth.uid == document;
+      allow delete: if true;
     }
 
     match /communities/{document} {
