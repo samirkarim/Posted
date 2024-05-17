@@ -13,6 +13,20 @@
           "order": "DESCENDING"
         }
       ]
+    },
+    {
+      "collectionGroup": "posts",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "community_ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "postLikesDislikesTotal",
+          "order": "DESCENDING"
+        }
+      ]
     }
   ]
 }

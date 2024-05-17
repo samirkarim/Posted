@@ -127,6 +127,21 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ),
             ),
           ),
+        ),
+        FFRoute(
+          name: 'viewingPost',
+          path: '/viewingPost',
+          builder: (context, params) => NavBarPage(
+            initialPage: '',
+            page: ViewingPostWidget(
+              specificPost: params.getParam(
+                'specificPost',
+                ParamType.DocumentReference,
+                isList: false,
+                collectionNamePath: ['posts'],
+              ),
+            ),
+          ),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
@@ -385,4 +400,14 @@ class RootPageContext {
         value: RootPageContext(true, errorRoute),
         child: child,
       );
+}
+
+extension GoRouterLocationExtension on GoRouter {
+  String getCurrentLocation() {
+    final RouteMatch lastMatch = routerDelegate.currentConfiguration.last;
+    final RouteMatchList matchList = lastMatch is ImperativeRouteMatch
+        ? lastMatch.matches
+        : routerDelegate.currentConfiguration;
+    return matchList.uri.toString();
+  }
 }

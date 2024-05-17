@@ -535,7 +535,8 @@ class _CommunitiesWidgetState extends State<CommunitiesWidget>
                                                                         child:
                                                                             Text(
                                                                           communitiesNoSearchItem
-                                                                              .communityMembersNo
+                                                                              .communityMembers
+                                                                              .length
                                                                               .toString(),
                                                                           style: FlutterFlowTheme.of(context)
                                                                               .labelMedium
