@@ -4,7 +4,7 @@ import 'package:substring_highlight/substring_highlight.dart';
 
 class AutocompleteOptionsList extends StatelessWidget {
   const AutocompleteOptionsList({
-    super.key,
+    Key? key,
     required this.textFieldKey,
     required this.textController,
     required this.options,
@@ -16,7 +16,7 @@ class AutocompleteOptionsList extends StatelessWidget {
     this.textHighlightStyle,
     this.maxHeight,
     this.elevation = 4.0,
-  });
+  }) : super(key: key);
 
   final GlobalKey textFieldKey;
   final TextEditingController textController;
@@ -36,7 +36,9 @@ class AutocompleteOptionsList extends StatelessWidget {
         textFieldKey.currentContext!.findRenderObject() as RenderBox;
     final textFieldWidth = textFieldBox.size.width;
     return Align(
-      alignment: Alignment.topLeft,
+      alignment: Directionality.of(context) == TextDirection.rtl
+          ? Alignment.topRight
+          : Alignment.topLeft,
       child: Material(
         elevation: elevation,
         child: ConstrainedBox(

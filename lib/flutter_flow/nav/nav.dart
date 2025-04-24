@@ -5,15 +5,18 @@ import 'package:provider/provider.dart';
 
 import '/auth/base_auth_user_provider.dart';
 
-import '/index.dart';
 import '/main.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+
+import '/index.dart';
 
 export 'package:go_router/go_router.dart';
 export 'serialization_util.dart';
 
 const kTransitionInfoKey = '__transition_info__';
+
+GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
 
 class AppStateNotifier extends ChangeNotifier {
   AppStateNotifier._();
@@ -72,50 +75,51 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       initialLocation: '/',
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
+      navigatorKey: appNavigatorKey,
       errorBuilder: (context, state) =>
-          appStateNotifier.loggedIn ? const NavBarPage() : const SignupSigninWidget(),
+          appStateNotifier.loggedIn ? NavBarPage() : SignupSigninWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
           builder: (context, _) =>
-              appStateNotifier.loggedIn ? const NavBarPage() : const SignupSigninWidget(),
+              appStateNotifier.loggedIn ? NavBarPage() : SignupSigninWidget(),
         ),
         FFRoute(
-          name: 'SignupSignin',
-          path: '/signupSignin',
-          builder: (context, params) => const SignupSigninWidget(),
+          name: SignupSigninWidget.routeName,
+          path: SignupSigninWidget.routePath,
+          builder: (context, params) => SignupSigninWidget(),
         ),
         FFRoute(
-          name: 'Home',
-          path: '/home',
+          name: HomeWidget.routeName,
+          path: HomeWidget.routePath,
           builder: (context, params) =>
-              params.isEmpty ? const NavBarPage(initialPage: 'Home') : const HomeWidget(),
+              params.isEmpty ? NavBarPage(initialPage: 'Home') : HomeWidget(),
         ),
         FFRoute(
-          name: 'CreatePostCommunity',
-          path: '/createPostCommunity',
+          name: CreatePostCommunityWidget.routeName,
+          path: CreatePostCommunityWidget.routePath,
           builder: (context, params) => params.isEmpty
-              ? const NavBarPage(initialPage: 'CreatePostCommunity')
-              : const CreatePostCommunityWidget(),
+              ? NavBarPage(initialPage: 'CreatePostCommunity')
+              : CreatePostCommunityWidget(),
         ),
         FFRoute(
-          name: 'ProfilePage',
-          path: '/profilePage',
+          name: ProfilePageWidget.routeName,
+          path: ProfilePageWidget.routePath,
           builder: (context, params) => params.isEmpty
-              ? const NavBarPage(initialPage: 'ProfilePage')
-              : const ProfilePageWidget(),
+              ? NavBarPage(initialPage: 'ProfilePage')
+              : ProfilePageWidget(),
         ),
         FFRoute(
-          name: 'Communities',
-          path: '/communities',
+          name: CommunitiesWidget.routeName,
+          path: CommunitiesWidget.routePath,
           builder: (context, params) => params.isEmpty
-              ? const NavBarPage(initialPage: 'Communities')
-              : const CommunitiesWidget(),
+              ? NavBarPage(initialPage: 'Communities')
+              : CommunitiesWidget(),
         ),
         FFRoute(
-          name: 'Community',
-          path: '/community',
+          name: CommunityWidget.routeName,
+          path: CommunityWidget.routePath,
           builder: (context, params) => NavBarPage(
             initialPage: '',
             page: CommunityWidget(
@@ -129,8 +133,8 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           ),
         ),
         FFRoute(
-          name: 'viewingPost',
-          path: '/viewingPost',
+          name: ViewingPostWidget.routeName,
+          path: ViewingPostWidget.routePath,
           builder: (context, params) => NavBarPage(
             initialPage: '',
             page: ViewingPostWidget(
@@ -140,6 +144,48 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                 isList: false,
                 collectionNamePath: ['posts'],
               ),
+            ),
+          ),
+        ),
+        FFRoute(
+          name: OtherUserProfilePageWidget.routeName,
+          path: OtherUserProfilePageWidget.routePath,
+          builder: (context, params) => NavBarPage(
+            initialPage: '',
+            page: OtherUserProfilePageWidget(
+              passedUser: params.getParam(
+                'passedUser',
+                ParamType.DocumentReference,
+                isList: false,
+                collectionNamePath: ['users'],
+              ),
+            ),
+          ),
+        ),
+        FFRoute(
+          name: ChatsWidget.routeName,
+          path: ChatsWidget.routePath,
+          builder: (context, params) => NavBarPage(
+            initialPage: '',
+            page: ChatsWidget(
+              passedUser: params.getParam(
+                'passedUser',
+                ParamType.DocumentReference,
+                isList: false,
+                collectionNamePath: ['users'],
+              ),
+            ),
+          ),
+        ),
+        FFRoute(
+          name: ViewingChatWidget.routeName,
+          path: ViewingChatWidget.routePath,
+          builder: (context, params) => ViewingChatWidget(
+            receiveChat: params.getParam(
+              'receiveChat',
+              ParamType.DocumentReference,
+              isList: false,
+              collectionNamePath: ['chats'],
             ),
           ),
         )
@@ -379,7 +425,7 @@ class TransitionInfo {
   final Duration duration;
   final Alignment? alignment;
 
-  static TransitionInfo appDefault() => const TransitionInfo(hasTransition: false);
+  static TransitionInfo appDefault() => TransitionInfo(hasTransition: false);
 }
 
 class RootPageContext {

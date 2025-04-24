@@ -1,15 +1,17 @@
 import '/flutter_flow/flutter_flow_util.dart';
+import '/index.dart';
 import 'signup_signin_widget.dart' show SignupSigninWidget;
 import 'package:flutter/material.dart';
 
 class SignupSigninModel extends FlutterFlowModel<SignupSigninWidget> {
   ///  State fields for stateful widgets in this page.
 
-  final unfocusNode = FocusNode();
   // State field(s) for TabBar widget.
   TabController? tabBarController;
   int get tabBarCurrentIndex =>
       tabBarController != null ? tabBarController!.index : 0;
+  int get tabBarPreviousIndex =>
+      tabBarController != null ? tabBarController!.previousIndex : 0;
 
   // State field(s) for emailAddress widget.
   FocusNode? emailAddressFocusNode;
@@ -39,7 +41,6 @@ class SignupSigninModel extends FlutterFlowModel<SignupSigninWidget> {
 
   @override
   void dispose() {
-    unfocusNode.dispose();
     tabBarController?.dispose();
     emailAddressFocusNode?.dispose();
     emailAddressTextController?.dispose();

@@ -1,5 +1,6 @@
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/index.dart';
 import 'create_post_community_widget.dart' show CreatePostCommunityWidget;
 import 'package:flutter/material.dart';
 
@@ -7,11 +8,12 @@ class CreatePostCommunityModel
     extends FlutterFlowModel<CreatePostCommunityWidget> {
   ///  State fields for stateful widgets in this page.
 
-  final unfocusNode = FocusNode();
   // State field(s) for TabBar widget.
   TabController? tabBarController;
   int get tabBarCurrentIndex =>
       tabBarController != null ? tabBarController!.index : 0;
+  int get tabBarPreviousIndex =>
+      tabBarController != null ? tabBarController!.previousIndex : 0;
 
   // State field(s) for PostCoummunityNameTextField widget.
   FocusNode? postCoummunityNameTextFieldFocusNode;
@@ -59,7 +61,6 @@ class CreatePostCommunityModel
 
   @override
   void dispose() {
-    unfocusNode.dispose();
     tabBarController?.dispose();
     postCoummunityNameTextFieldFocusNode?.dispose();
     postCoummunityNameTextFieldTextController?.dispose();

@@ -10,9 +10,9 @@ import '/flutter_flow/flutter_flow_util.dart';
 
 class CommentsRecord extends FirestoreRecord {
   CommentsRecord._(
-    super.reference,
-    super.data,
-  ) {
+    DocumentReference reference,
+    Map<String, dynamic> data,
+  ) : super(reference, data) {
     _initializeFields();
   }
 
@@ -46,6 +46,11 @@ class CommentsRecord extends FirestoreRecord {
   DocumentReference? get commenter => _commenter;
   bool hasCommenter() => _commenter != null;
 
+  // "repliedComment" field.
+  List<DocumentReference>? _repliedComment;
+  List<DocumentReference> get repliedComment => _repliedComment ?? const [];
+  bool hasRepliedComment() => _repliedComment != null;
+
   DocumentReference get parentReference => reference.parent.parent!;
 
   void _initializeFields() {
@@ -56,6 +61,7 @@ class CommentsRecord extends FirestoreRecord {
     _commentLikesDislikesTotal =
         castToType<int>(snapshotData['commentLikesDislikesTotal']);
     _commenter = snapshotData['commenter'] as DocumentReference?;
+    _repliedComment = getDataList(snapshotData['repliedComment']);
   }
 
   static Query<Map<String, dynamic>> collection([DocumentReference? parent]) =>
@@ -126,7 +132,8 @@ class CommentsRecordDocumentEquality implements Equality<CommentsRecord> {
         listEquality.equals(e1?.commentLikes, e2?.commentLikes) &&
         listEquality.equals(e1?.commentDislikes, e2?.commentDislikes) &&
         e1?.commentLikesDislikesTotal == e2?.commentLikesDislikesTotal &&
-        e1?.commenter == e2?.commenter;
+        e1?.commenter == e2?.commenter &&
+        listEquality.equals(e1?.repliedComment, e2?.repliedComment);
   }
 
   @override
@@ -136,7 +143,8 @@ class CommentsRecordDocumentEquality implements Equality<CommentsRecord> {
         e?.commentLikes,
         e?.commentDislikes,
         e?.commentLikesDislikesTotal,
-        e?.commenter
+        e?.commenter,
+        e?.repliedComment
       ]);
 
   @override

@@ -23,8 +23,8 @@ List<T>? getStructList<T>(
     value is! List
         ? null
         : value
-            .whereType<Map<String, dynamic>>()
-            .map((e) => structBuilder(e))
+            .where((e) => e is Map<String, dynamic>)
+            .map((e) => structBuilder(e as Map<String, dynamic>))
             .toList();
 
 Color? getSchemaColor(dynamic value) => value is String
@@ -38,11 +38,3 @@ List<Color>? getColorsList(dynamic value) =>
 
 List<T>? getDataList<T>(dynamic value) =>
     value is! List ? null : value.map((e) => castToType<T>(e)!).toList();
-
-extension MapDataExtensions on Map<String, dynamic> {
-  Map<String, dynamic> get withoutNulls => Map.fromEntries(
-        entries
-            .where((e) => e.value != null)
-            .map((e) => MapEntry(e.key, e.value!)),
-      );
-}
