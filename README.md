@@ -1,6 +1,6 @@
 # Posted - a social media app
 
-A project for final year computer science
+A project for final year computer science\
 Project supervisor: Haoyi Wang
 
 For social media users, who want their submissions/posts to be valued, Posted is an app
