@@ -1,9 +1,9 @@
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
-import 'home_widget.dart' show HomeWidget;
+import 'chats_widget.dart' show ChatsWidget;
 import 'package:flutter/material.dart';
 
-class HomeModel extends FlutterFlowModel<HomeWidget> {
+class ChatsModel extends FlutterFlowModel<ChatsWidget> {
   @override
   void initState(BuildContext context) {}
 

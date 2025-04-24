@@ -10,9 +10,9 @@ import '/flutter_flow/flutter_flow_util.dart';
 
 class CommunitiesRecord extends FirestoreRecord {
   CommunitiesRecord._(
-    super.reference,
-    super.data,
-  ) {
+    DocumentReference reference,
+    Map<String, dynamic> data,
+  ) : super(reference, data) {
     _initializeFields();
   }
 
@@ -46,6 +46,11 @@ class CommunitiesRecord extends FirestoreRecord {
   int get communityMembersNo => _communityMembersNo ?? 0;
   bool hasCommunityMembersNo() => _communityMembersNo != null;
 
+  // "communityID" field.
+  String? _communityID;
+  String get communityID => _communityID ?? '';
+  bool hasCommunityID() => _communityID != null;
+
   void _initializeFields() {
     _postsRef = getDataList(snapshotData['posts_ref']);
     _communityName = snapshotData['communityName'] as String?;
@@ -53,6 +58,7 @@ class CommunitiesRecord extends FirestoreRecord {
     _communityDisplayPic = snapshotData['communityDisplayPic'] as String?;
     _communityMembers = getDataList(snapshotData['communityMembers']);
     _communityMembersNo = castToType<int>(snapshotData['communityMembersNo']);
+    _communityID = snapshotData['communityID'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -94,6 +100,7 @@ Map<String, dynamic> createCommunitiesRecordData({
   String? communityDescription,
   String? communityDisplayPic,
   int? communityMembersNo,
+  String? communityID,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -101,6 +108,7 @@ Map<String, dynamic> createCommunitiesRecordData({
       'communityDescription': communityDescription,
       'communityDisplayPic': communityDisplayPic,
       'communityMembersNo': communityMembersNo,
+      'communityID': communityID,
     }.withoutNulls,
   );
 
@@ -118,7 +126,8 @@ class CommunitiesRecordDocumentEquality implements Equality<CommunitiesRecord> {
         e1?.communityDescription == e2?.communityDescription &&
         e1?.communityDisplayPic == e2?.communityDisplayPic &&
         listEquality.equals(e1?.communityMembers, e2?.communityMembers) &&
-        e1?.communityMembersNo == e2?.communityMembersNo;
+        e1?.communityMembersNo == e2?.communityMembersNo &&
+        e1?.communityID == e2?.communityID;
   }
 
   @override
@@ -128,7 +137,8 @@ class CommunitiesRecordDocumentEquality implements Equality<CommunitiesRecord> {
         e?.communityDescription,
         e?.communityDisplayPic,
         e?.communityMembers,
-        e?.communityMembersNo
+        e?.communityMembersNo,
+        e?.communityID
       ]);
 
   @override

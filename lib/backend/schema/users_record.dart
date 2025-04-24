@@ -6,12 +6,13 @@ import '/backend/schema/util/firestore_util.dart';
 import '/backend/schema/util/schema_util.dart';
 
 import 'index.dart';
+import '/flutter_flow/flutter_flow_util.dart';
 
 class UsersRecord extends FirestoreRecord {
   UsersRecord._(
-    super.reference,
-    super.data,
-  ) {
+    DocumentReference reference,
+    Map<String, dynamic> data,
+  ) : super(reference, data) {
     _initializeFields();
   }
 
@@ -51,6 +52,11 @@ class UsersRecord extends FirestoreRecord {
       _subscribedCommunities ?? const [];
   bool hasSubscribedCommunities() => _subscribedCommunities != null;
 
+  // "chattingWith" field.
+  List<DocumentReference>? _chattingWith;
+  List<DocumentReference> get chattingWith => _chattingWith ?? const [];
+  bool hasChattingWith() => _chattingWith != null;
+
   void _initializeFields() {
     _email = snapshotData['email'] as String?;
     _displayName = snapshotData['display_name'] as String?;
@@ -59,6 +65,7 @@ class UsersRecord extends FirestoreRecord {
     _createdTime = snapshotData['created_time'] as DateTime?;
     _phoneNumber = snapshotData['phone_number'] as String?;
     _subscribedCommunities = getDataList(snapshotData['subscribedCommunities']);
+    _chattingWith = getDataList(snapshotData['chattingWith']);
   }
 
   static CollectionReference get collection =>
@@ -129,7 +136,8 @@ class UsersRecordDocumentEquality implements Equality<UsersRecord> {
         e1?.createdTime == e2?.createdTime &&
         e1?.phoneNumber == e2?.phoneNumber &&
         listEquality.equals(
-            e1?.subscribedCommunities, e2?.subscribedCommunities);
+            e1?.subscribedCommunities, e2?.subscribedCommunities) &&
+        listEquality.equals(e1?.chattingWith, e2?.chattingWith);
   }
 
   @override
@@ -140,7 +148,8 @@ class UsersRecordDocumentEquality implements Equality<UsersRecord> {
         e?.uid,
         e?.createdTime,
         e?.phoneNumber,
-        e?.subscribedCommunities
+        e?.subscribedCommunities,
+        e?.chattingWith
       ]);
 
   @override

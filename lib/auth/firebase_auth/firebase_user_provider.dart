@@ -8,7 +8,6 @@ export '../base_auth_user_provider.dart';
 class PostedFirebaseUser extends BaseAuthUser {
   PostedFirebaseUser(this.user);
   User? user;
-  @override
   bool get loggedIn => user != null;
 
   @override
@@ -30,6 +29,11 @@ class PostedFirebaseUser extends BaseAuthUser {
     } catch (_) {
       await user?.verifyBeforeUpdateEmail(email);
     }
+  }
+
+  @override
+  Future? updatePassword(String newPassword) async {
+    await user?.updatePassword(newPassword);
   }
 
   @override

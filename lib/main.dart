@@ -6,26 +6,24 @@ import 'auth/firebase_auth/firebase_user_provider.dart';
 import 'auth/firebase_auth/auth_util.dart';
 
 import 'backend/firebase/firebase_config.dart';
-import 'flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
 import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
-import 'flutter_flow/nav/nav.dart';
 import 'index.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   GoRouter.optionURLReflectsImperativeAPIs = true;
   usePathUrlStrategy();
+
   await initFirebase();
 
   await FlutterFlowTheme.initialize();
 
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
-
   // This widget is the root of your application.
   @override
   State<MyApp> createState() => _MyAppState();
@@ -37,10 +35,23 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   ThemeMode _themeMode = FlutterFlowTheme.themeMode;
 
-  late Stream<BaseAuthUser> userStream;
-
   late AppStateNotifier _appStateNotifier;
   late GoRouter _router;
+  String getRoute([RouteMatch? routeMatch]) {
+    final RouteMatch lastMatch =
+        routeMatch ?? _router.routerDelegate.currentConfiguration.last;
+    final RouteMatchList matchList = lastMatch is ImperativeRouteMatch
+        ? lastMatch.matches
+        : _router.routerDelegate.currentConfiguration;
+    return matchList.uri.toString();
+  }
+
+  List<String> getRouteStack() =>
+      _router.routerDelegate.currentConfiguration.matches
+          .map((e) => getRoute(e))
+          .toList();
+
+  late Stream<BaseAuthUser> userStream;
 
   final authUserSub = authenticatedUserStream.listen((_) {});
 
@@ -51,10 +62,12 @@ class _MyAppState extends State<MyApp> {
     _appStateNotifier = AppStateNotifier.instance;
     _router = createRouter(_appStateNotifier);
     userStream = postedFirebaseUserStream()
-      ..listen((user) => _appStateNotifier.update(user));
+      ..listen((user) {
+        _appStateNotifier.update(user);
+      });
     jwtTokenStream.listen((_) {});
     Future.delayed(
-      const Duration(milliseconds: 1000),
+      Duration(milliseconds: 1000),
       () => _appStateNotifier.stopShowingSplashImage(),
     );
   }
@@ -66,7 +79,7 @@ class _MyAppState extends State<MyApp> {
     super.dispose();
   }
 
-  void setThemeMode(ThemeMode mode) => setState(() {
+  void setThemeMode(ThemeMode mode) => safeSetState(() {
         _themeMode = mode;
         FlutterFlowTheme.saveThemeMode(mode);
       });
@@ -74,8 +87,9 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
       title: 'Posted',
-      localizationsDelegates: const [
+      localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
@@ -96,7 +110,7 @@ class _MyAppState extends State<MyApp> {
 }
 
 class NavBarPage extends StatefulWidget {
-  const NavBarPage({super.key, this.initialPage, this.page});
+  NavBarPage({Key? key, this.initialPage, this.page}) : super(key: key);
 
   final String? initialPage;
   final Widget? page;
@@ -120,10 +134,10 @@ class _NavBarPageState extends State<NavBarPage> {
   @override
   Widget build(BuildContext context) {
     final tabs = {
-      'Home': const HomeWidget(),
-      'Communities': const CommunitiesWidget(),
-      'CreatePostCommunity': const CreatePostCommunityWidget(),
-      'ProfilePage': const ProfilePageWidget(),
+      'Home': HomeWidget(),
+      'Communities': CommunitiesWidget(),
+      'CreatePostCommunity': CreatePostCommunityWidget(),
+      'ProfilePage': ProfilePageWidget(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
 
@@ -138,18 +152,18 @@ class _NavBarPageState extends State<NavBarPage> {
       extendBody: true,
       bottomNavigationBar: FloatingNavbar(
         currentIndex: currentIndex,
-        onTap: (i) => setState(() {
+        onTap: (i) => safeSetState(() {
           _currentPage = null;
           _currentPageName = tabs.keys.toList()[i];
         }),
         backgroundColor: Colors.white,
         selectedItemColor: FlutterFlowTheme.of(context).primary,
-        unselectedItemColor: const Color(0x8A000000),
-        selectedBackgroundColor: const Color(0x00000000),
+        unselectedItemColor: Color(0x8A000000),
+        selectedBackgroundColor: Color(0x00000000),
         borderRadius: 8.0,
         itemBorderRadius: 8.0,
-        margin: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-        padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+        margin: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+        padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
         width: double.infinity,
         elevation: 0.0,
         items: [
@@ -161,7 +175,7 @@ class _NavBarPageState extends State<NavBarPage> {
                   Icons.home_outlined,
                   color: currentIndex == 0
                       ? FlutterFlowTheme.of(context).primary
-                      : const Color(0x8A000000),
+                      : Color(0x8A000000),
                   size: 24.0,
                 ),
                 Text(
@@ -170,7 +184,7 @@ class _NavBarPageState extends State<NavBarPage> {
                   style: TextStyle(
                     color: currentIndex == 0
                         ? FlutterFlowTheme.of(context).primary
-                        : const Color(0x8A000000),
+                        : Color(0x8A000000),
                     fontSize: 11.0,
                   ),
                 ),
@@ -185,7 +199,7 @@ class _NavBarPageState extends State<NavBarPage> {
                   Icons.groups_sharp,
                   color: currentIndex == 1
                       ? FlutterFlowTheme.of(context).primary
-                      : const Color(0x8A000000),
+                      : Color(0x8A000000),
                 ),
                 Text(
                   'Communities',
@@ -193,7 +207,7 @@ class _NavBarPageState extends State<NavBarPage> {
                   style: TextStyle(
                     color: currentIndex == 1
                         ? FlutterFlowTheme.of(context).primary
-                        : const Color(0x8A000000),
+                        : Color(0x8A000000),
                     fontSize: 11.0,
                   ),
                 ),
@@ -208,7 +222,7 @@ class _NavBarPageState extends State<NavBarPage> {
                   Icons.add,
                   color: currentIndex == 2
                       ? FlutterFlowTheme.of(context).primary
-                      : const Color(0x8A000000),
+                      : Color(0x8A000000),
                   size: 24.0,
                 ),
                 Text(
@@ -217,7 +231,7 @@ class _NavBarPageState extends State<NavBarPage> {
                   style: TextStyle(
                     color: currentIndex == 2
                         ? FlutterFlowTheme.of(context).primary
-                        : const Color(0x8A000000),
+                        : Color(0x8A000000),
                     fontSize: 11.0,
                   ),
                 ),
@@ -232,7 +246,7 @@ class _NavBarPageState extends State<NavBarPage> {
                   Icons.person_rounded,
                   color: currentIndex == 3
                       ? FlutterFlowTheme.of(context).primary
-                      : const Color(0x8A000000),
+                      : Color(0x8A000000),
                 ),
                 Text(
                   'Profile',
@@ -240,7 +254,7 @@ class _NavBarPageState extends State<NavBarPage> {
                   style: TextStyle(
                     color: currentIndex == 3
                         ? FlutterFlowTheme.of(context).primary
-                        : const Color(0x8A000000),
+                        : Color(0x8A000000),
                     fontSize: 11.0,
                   ),
                 ),

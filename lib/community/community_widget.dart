@@ -5,8 +5,10 @@ import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'community_model.dart';
 export 'community_model.dart';
 
@@ -17,6 +19,9 @@ class CommunityWidget extends StatefulWidget {
   });
 
   final DocumentReference? specificCommunity;
+
+  static String routeName = 'Community';
+  static String routePath = '/community';
 
   @override
   State<CommunityWidget> createState() => _CommunityWidgetState();
@@ -31,6 +36,8 @@ class _CommunityWidgetState extends State<CommunityWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => CommunityModel());
+
+    _model.switchValue = true;
   }
 
   @override
@@ -62,11 +69,14 @@ class _CommunityWidgetState extends State<CommunityWidget> {
             ),
           );
         }
+
         final communityCommunitiesRecord = snapshot.data!;
+
         return GestureDetector(
-          onTap: () => _model.unfocusNode.canRequestFocus
-              ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-              : FocusScope.of(context).unfocus(),
+          onTap: () {
+            FocusScope.of(context).unfocus();
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
           child: Scaffold(
             key: scaffoldKey,
             backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
@@ -76,13 +86,25 @@ class _CommunityWidgetState extends State<CommunityWidget> {
               title: Text(
                 'Posted',
                 style: FlutterFlowTheme.of(context).headlineMedium.override(
-                      fontFamily: 'Outfit',
+                      font: GoogleFonts.outfit(
+                        fontWeight: FlutterFlowTheme.of(context)
+                            .headlineMedium
+                            .fontWeight,
+                        fontStyle: FlutterFlowTheme.of(context)
+                            .headlineMedium
+                            .fontStyle,
+                      ),
                       color: Colors.white,
                       fontSize: 22.0,
                       letterSpacing: 0.0,
+                      fontWeight: FlutterFlowTheme.of(context)
+                          .headlineMedium
+                          .fontWeight,
+                      fontStyle:
+                          FlutterFlowTheme.of(context).headlineMedium.fontStyle,
                     ),
               ),
-              actions: const [],
+              actions: [],
               centerTitle: false,
               elevation: 2.0,
             ),
@@ -98,12 +120,12 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              SizedBox(
+                              Container(
                                 height: 125.0,
                                 child: Stack(
                                   children: [
                                     Align(
-                                      alignment: const AlignmentDirectional(0.0, 1.0),
+                                      alignment: AlignmentDirectional(0.0, 1.0),
                                       child: Material(
                                         color: Colors.transparent,
                                         elevation: 0.0,
@@ -123,7 +145,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                             ),
                                           ),
                                           child: Padding(
-                                            padding: const EdgeInsets.all(4.0),
+                                            padding: EdgeInsets.all(4.0),
                                             child: InkWell(
                                               splashColor: Colors.transparent,
                                               focusColor: Colors.transparent,
@@ -195,27 +217,55 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                           ),
                                         });
 
-                                        context.pushNamed('Home');
+                                        await currentUserReference!.update({
+                                          ...mapToFirestore(
+                                            {
+                                              'subscribedCommunities':
+                                                  FieldValue.arrayRemove([
+                                                widget.specificCommunity
+                                              ]),
+                                            },
+                                          ),
+                                        });
+
+                                        context.pushNamed(HomeWidget.routeName);
                                       },
                                       text: 'Unsubscribe',
                                       options: FFButtonOptions(
                                         height: 40.0,
-                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
                                             24.0, 0.0, 24.0, 0.0),
                                         iconPadding:
-                                            const EdgeInsetsDirectional.fromSTEB(
+                                            EdgeInsetsDirectional.fromSTEB(
                                                 0.0, 0.0, 0.0, 0.0),
                                         color: FlutterFlowTheme.of(context)
                                             .primary,
                                         textStyle: FlutterFlowTheme.of(context)
                                             .titleSmall
                                             .override(
-                                              fontFamily: 'Readex Pro',
+                                              font: GoogleFonts.readexPro(
+                                                fontWeight:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleSmall
+                                                        .fontWeight,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleSmall
+                                                        .fontStyle,
+                                              ),
                                               color: Colors.white,
                                               letterSpacing: 0.0,
+                                              fontWeight:
+                                                  FlutterFlowTheme.of(context)
+                                                      .titleSmall
+                                                      .fontWeight,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .titleSmall
+                                                      .fontStyle,
                                             ),
                                         elevation: 3.0,
-                                        borderSide: const BorderSide(
+                                        borderSide: BorderSide(
                                           color: Colors.transparent,
                                           width: 1.0,
                                         ),
@@ -238,27 +288,55 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                           ),
                                         });
 
-                                        context.pushNamed('Home');
+                                        await currentUserReference!.update({
+                                          ...mapToFirestore(
+                                            {
+                                              'subscribedCommunities':
+                                                  FieldValue.arrayUnion([
+                                                widget.specificCommunity
+                                              ]),
+                                            },
+                                          ),
+                                        });
+
+                                        context.pushNamed(HomeWidget.routeName);
                                       },
                                       text: 'Subscribe',
                                       options: FFButtonOptions(
                                         height: 40.0,
-                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
                                             24.0, 0.0, 24.0, 0.0),
                                         iconPadding:
-                                            const EdgeInsetsDirectional.fromSTEB(
+                                            EdgeInsetsDirectional.fromSTEB(
                                                 0.0, 0.0, 0.0, 0.0),
                                         color: FlutterFlowTheme.of(context)
                                             .primary,
                                         textStyle: FlutterFlowTheme.of(context)
                                             .titleSmall
                                             .override(
-                                              fontFamily: 'Readex Pro',
+                                              font: GoogleFonts.readexPro(
+                                                fontWeight:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleSmall
+                                                        .fontWeight,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleSmall
+                                                        .fontStyle,
+                                              ),
                                               color: Colors.white,
                                               letterSpacing: 0.0,
+                                              fontWeight:
+                                                  FlutterFlowTheme.of(context)
+                                                      .titleSmall
+                                                      .fontWeight,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .titleSmall
+                                                      .fontStyle,
                                             ),
                                         elevation: 3.0,
-                                        borderSide: const BorderSide(
+                                        borderSide: BorderSide(
                                           color: Colors.transparent,
                                           width: 1.0,
                                         ),
@@ -270,7 +348,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                 },
                               ),
                               Padding(
-                                padding: const EdgeInsetsDirectional.fromSTEB(
+                                padding: EdgeInsetsDirectional.fromSTEB(
                                     0.0, 16.0, 0.0, 0.0),
                                 child: Text(
                                   valueOrDefault<String>(
@@ -280,13 +358,28 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                   style: FlutterFlowTheme.of(context)
                                       .headlineSmall
                                       .override(
-                                        fontFamily: 'Outfit',
+                                        font: GoogleFonts.outfit(
+                                          fontWeight:
+                                              FlutterFlowTheme.of(context)
+                                                  .headlineSmall
+                                                  .fontWeight,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .headlineSmall
+                                                  .fontStyle,
+                                        ),
                                         letterSpacing: 0.0,
+                                        fontWeight: FlutterFlowTheme.of(context)
+                                            .headlineSmall
+                                            .fontWeight,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .headlineSmall
+                                            .fontStyle,
                                       ),
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.all(16.0),
+                                padding: EdgeInsets.all(16.0),
                                 child: Container(
                                   width: double.infinity,
                                   decoration: BoxDecoration(
@@ -295,7 +388,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                     borderRadius: BorderRadius.circular(12.0),
                                   ),
                                   child: Padding(
-                                    padding: const EdgeInsetsDirectional.fromSTEB(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
                                         12.0, 16.0, 12.0, 16.0),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.max,
@@ -309,7 +402,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                 MainAxisAlignment.center,
                                             children: [
                                               Padding(
-                                                padding: const EdgeInsetsDirectional
+                                                padding: EdgeInsetsDirectional
                                                     .fromSTEB(
                                                         0.0, 0.0, 0.0, 8.0),
                                                 child: Text(
@@ -320,21 +413,64 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                           context)
                                                       .titleLarge
                                                       .override(
-                                                        fontFamily: 'Outfit',
+                                                        font:
+                                                            GoogleFonts.outfit(
+                                                          fontWeight:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .titleLarge
+                                                                  .fontWeight,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .titleLarge
+                                                                  .fontStyle,
+                                                        ),
                                                         letterSpacing: 0.0,
+                                                        fontWeight:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .titleLarge
+                                                                .fontWeight,
+                                                        fontStyle:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .titleLarge
+                                                                .fontStyle,
                                                       ),
                                                 ),
                                               ),
                                               Text(
                                                 'Posts',
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .labelMedium
-                                                        .override(
-                                                          fontFamily:
-                                                              'Readex Pro',
-                                                          letterSpacing: 0.0,
-                                                        ),
+                                                style: FlutterFlowTheme.of(
+                                                        context)
+                                                    .labelMedium
+                                                    .override(
+                                                      font:
+                                                          GoogleFonts.readexPro(
+                                                        fontWeight:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .labelMedium
+                                                                .fontWeight,
+                                                        fontStyle:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .labelMedium
+                                                                .fontStyle,
+                                                      ),
+                                                      letterSpacing: 0.0,
+                                                      fontWeight:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .labelMedium
+                                                              .fontWeight,
+                                                      fontStyle:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .labelMedium
+                                                              .fontStyle,
+                                                    ),
                                               ),
                                             ],
                                           ),
@@ -346,7 +482,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                 MainAxisAlignment.center,
                                             children: [
                                               Padding(
-                                                padding: const EdgeInsetsDirectional
+                                                padding: EdgeInsetsDirectional
                                                     .fromSTEB(
                                                         0.0, 0.0, 0.0, 8.0),
                                                 child: Text(
@@ -357,21 +493,64 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                           context)
                                                       .titleLarge
                                                       .override(
-                                                        fontFamily: 'Outfit',
+                                                        font:
+                                                            GoogleFonts.outfit(
+                                                          fontWeight:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .titleLarge
+                                                                  .fontWeight,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .titleLarge
+                                                                  .fontStyle,
+                                                        ),
                                                         letterSpacing: 0.0,
+                                                        fontWeight:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .titleLarge
+                                                                .fontWeight,
+                                                        fontStyle:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .titleLarge
+                                                                .fontStyle,
                                                       ),
                                                 ),
                                               ),
                                               Text(
                                                 'Members',
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .labelMedium
-                                                        .override(
-                                                          fontFamily:
-                                                              'Readex Pro',
-                                                          letterSpacing: 0.0,
-                                                        ),
+                                                style: FlutterFlowTheme.of(
+                                                        context)
+                                                    .labelMedium
+                                                    .override(
+                                                      font:
+                                                          GoogleFonts.readexPro(
+                                                        fontWeight:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .labelMedium
+                                                                .fontWeight,
+                                                        fontStyle:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .labelMedium
+                                                                .fontStyle,
+                                                      ),
+                                                      letterSpacing: 0.0,
+                                                      fontWeight:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .labelMedium
+                                                              .fontWeight,
+                                                      fontStyle:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .labelMedium
+                                                              .fontStyle,
+                                                    ),
                                               ),
                                             ],
                                           ),
@@ -386,8 +565,21 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
-                                      fontFamily: 'Readex Pro',
+                                      font: GoogleFonts.readexPro(
+                                        fontWeight: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontWeight,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontStyle,
+                                      ),
                                       letterSpacing: 0.0,
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
                                     ),
                               ),
                               Divider(
@@ -398,15 +590,32 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsetsDirectional.fromSTEB(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
                                         10.0, 0.0, 10.0, 0.0),
                                     child: Text(
                                       'Top',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
-                                            fontFamily: 'Readex Pro',
+                                            font: GoogleFonts.readexPro(
+                                              fontWeight:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .fontWeight,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .fontStyle,
+                                            ),
                                             letterSpacing: 0.0,
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
                                           ),
                                     ),
                                   ),
@@ -417,9 +626,9 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                     size: 24.0,
                                   ),
                                   Switch.adaptive(
-                                    value: _model.switchValue ??= true,
+                                    value: _model.switchValue!,
                                     onChanged: (newValue) async {
-                                      setState(
+                                      safeSetState(
                                           () => _model.switchValue = newValue);
                                     },
                                     activeColor:
@@ -439,15 +648,32 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                     size: 24.0,
                                   ),
                                   Padding(
-                                    padding: const EdgeInsetsDirectional.fromSTEB(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
                                         10.0, 0.0, 0.0, 0.0),
                                     child: Text(
                                       'Recent',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
-                                            fontFamily: 'Readex Pro',
+                                            font: GoogleFonts.readexPro(
+                                              fontWeight:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .fontWeight,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .fontStyle,
+                                            ),
                                             letterSpacing: 0.0,
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
                                           ),
                                     ),
                                   ),
@@ -467,7 +693,8 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                       queryBuilder: (postsRecord) => postsRecord
                                           .where(
                                             'community_ref',
-                                            isEqualTo: widget.specificCommunity,
+                                            isEqualTo:
+                                                widget.specificCommunity,
                                           )
                                           .orderBy('postCreationDateTime',
                                               descending: true),
@@ -492,6 +719,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                       List<PostsRecord>
                                           listViewPostsRecordList =
                                           snapshot.data!;
+
                                       return ListView.builder(
                                         padding: EdgeInsets.zero,
                                         shrinkWrap: true,
@@ -504,7 +732,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                   listViewIndex];
                                           return Padding(
                                             padding:
-                                                const EdgeInsetsDirectional.fromSTEB(
+                                                EdgeInsetsDirectional.fromSTEB(
                                                     0.0, 0.0, 0.0, 24.0),
                                             child: StreamBuilder<
                                                 List<UsersRecord>>(
@@ -550,6 +778,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                         ? socialPost2UsersRecordList
                                                             .first
                                                         : null;
+
                                                 return Container(
                                                   width: double.infinity,
                                                   decoration: BoxDecoration(
@@ -562,7 +791,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                         color: FlutterFlowTheme
                                                                 .of(context)
                                                             .primaryBackground,
-                                                        offset: const Offset(
+                                                        offset: Offset(
                                                           0.0,
                                                           1.0,
                                                         ),
@@ -571,7 +800,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                   ),
                                                   child: Padding(
                                                     padding:
-                                                        const EdgeInsets.all(4.0),
+                                                        EdgeInsets.all(4.0),
                                                     child: InkWell(
                                                       splashColor:
                                                           Colors.transparent,
@@ -583,7 +812,8 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                           Colors.transparent,
                                                       onTap: () async {
                                                         context.pushNamed(
-                                                          'viewingPost',
+                                                          ViewingPostWidget
+                                                              .routeName,
                                                           queryParameters: {
                                                             'specificPost':
                                                                 serializeParam(
@@ -601,7 +831,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                         children: [
                                                           Padding(
                                                             padding:
-                                                                const EdgeInsetsDirectional
+                                                                EdgeInsetsDirectional
                                                                     .fromSTEB(
                                                                         8.0,
                                                                         8.0,
@@ -650,7 +880,8 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                           tag: valueOrDefault<
                                                                               String>(
                                                                             socialPost2UsersRecord?.photoUrl,
-                                                                            'https://cdn-icons-png.flaticon.com/128/1077/1077114.png' '$listViewIndex',
+                                                                            'https://cdn-icons-png.flaticon.com/128/1077/1077114.png' +
+                                                                                '$listViewIndex',
                                                                           ),
                                                                           useHeroAnimation:
                                                                               true,
@@ -663,7 +894,8 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                         String>(
                                                                       socialPost2UsersRecord
                                                                           ?.photoUrl,
-                                                                      'https://cdn-icons-png.flaticon.com/128/1077/1077114.png' '$listViewIndex',
+                                                                      'https://cdn-icons-png.flaticon.com/128/1077/1077114.png' +
+                                                                          '$listViewIndex',
                                                                     ),
                                                                     transitionOnUserGestures:
                                                                         true,
@@ -676,7 +908,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                       clipBehavior:
                                                                           Clip.antiAlias,
                                                                       decoration:
-                                                                          const BoxDecoration(
+                                                                          BoxDecoration(
                                                                         shape: BoxShape
                                                                             .circle,
                                                                       ),
@@ -695,7 +927,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                   ),
                                                                 ),
                                                                 Padding(
-                                                                  padding: const EdgeInsetsDirectional
+                                                                  padding: EdgeInsetsDirectional
                                                                       .fromSTEB(
                                                                           12.0,
                                                                           4.0,
@@ -719,8 +951,13 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                         style: FlutterFlowTheme.of(context)
                                                                             .bodyLarge
                                                                             .override(
-                                                                              fontFamily: 'Readex Pro',
+                                                                              font: GoogleFonts.readexPro(
+                                                                                fontWeight: FlutterFlowTheme.of(context).bodyLarge.fontWeight,
+                                                                                fontStyle: FlutterFlowTheme.of(context).bodyLarge.fontStyle,
+                                                                              ),
                                                                               letterSpacing: 0.0,
+                                                                              fontWeight: FlutterFlowTheme.of(context).bodyLarge.fontWeight,
+                                                                              fontStyle: FlutterFlowTheme.of(context).bodyLarge.fontStyle,
                                                                             ),
                                                                       ),
                                                                       RichText(
@@ -731,17 +968,22 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                           children: [
                                                                             TextSpan(
                                                                               text: valueOrDefault<String>(
-                                                                                listViewPostsRecord.postCreationDateTime?.toString(),
+                                                                                dateTimeFormat("relative", listViewPostsRecord.postCreationDateTime),
                                                                                 '0',
                                                                               ),
-                                                                              style: const TextStyle(),
+                                                                              style: TextStyle(),
                                                                             )
                                                                           ],
                                                                           style: FlutterFlowTheme.of(context)
                                                                               .labelSmall
                                                                               .override(
-                                                                                fontFamily: 'Readex Pro',
+                                                                                font: GoogleFonts.readexPro(
+                                                                                  fontWeight: FlutterFlowTheme.of(context).labelSmall.fontWeight,
+                                                                                  fontStyle: FlutterFlowTheme.of(context).labelSmall.fontStyle,
+                                                                                ),
                                                                                 letterSpacing: 0.0,
+                                                                                fontWeight: FlutterFlowTheme.of(context).labelSmall.fontWeight,
+                                                                                fontStyle: FlutterFlowTheme.of(context).labelSmall.fontStyle,
                                                                               ),
                                                                         ),
                                                                       ),
@@ -753,7 +995,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                           ),
                                                           Padding(
                                                             padding:
-                                                                const EdgeInsetsDirectional
+                                                                EdgeInsetsDirectional
                                                                     .fromSTEB(
                                                                         8.0,
                                                                         0.0,
@@ -768,7 +1010,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                       .start,
                                                               children: [
                                                                 Padding(
-                                                                  padding: const EdgeInsetsDirectional
+                                                                  padding: EdgeInsetsDirectional
                                                                       .fromSTEB(
                                                                           0.0,
                                                                           4.0,
@@ -781,10 +1023,21 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                             context)
                                                                         .bodyLarge
                                                                         .override(
-                                                                          fontFamily:
-                                                                              'Readex Pro',
+                                                                          font:
+                                                                              GoogleFonts.readexPro(
+                                                                            fontWeight:
+                                                                                FlutterFlowTheme.of(context).bodyLarge.fontWeight,
+                                                                            fontStyle:
+                                                                                FlutterFlowTheme.of(context).bodyLarge.fontStyle,
+                                                                          ),
                                                                           letterSpacing:
                                                                               0.0,
+                                                                          fontWeight: FlutterFlowTheme.of(context)
+                                                                              .bodyLarge
+                                                                              .fontWeight,
+                                                                          fontStyle: FlutterFlowTheme.of(context)
+                                                                              .bodyLarge
+                                                                              .fontStyle,
                                                                         ),
                                                                   ),
                                                                 ),
@@ -808,7 +1061,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                     ),
                                                                   ),
                                                                 Padding(
-                                                                  padding: const EdgeInsetsDirectional
+                                                                  padding: EdgeInsetsDirectional
                                                                       .fromSTEB(
                                                                           4.0,
                                                                           8.0,
@@ -823,7 +1076,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                             .spaceAround,
                                                                     children: [
                                                                       Padding(
-                                                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                        padding: EdgeInsetsDirectional.fromSTEB(
                                                                             0.0,
                                                                             0.0,
                                                                             12.0,
@@ -834,7 +1087,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                               MainAxisSize.max,
                                                                           children: [
                                                                             Padding(
-                                                                              padding: const EdgeInsetsDirectional.fromSTEB(8.0, 8.0, 0.0, 8.0),
+                                                                              padding: EdgeInsetsDirectional.fromSTEB(8.0, 8.0, 0.0, 8.0),
                                                                               child: Icon(
                                                                                 Icons.mode_comment_outlined,
                                                                                 color: FlutterFlowTheme.of(context).secondaryText,
@@ -842,12 +1095,17 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                               ),
                                                                             ),
                                                                             Padding(
-                                                                              padding: const EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 8.0, 0.0),
+                                                                              padding: EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 8.0, 0.0),
                                                                               child: Text(
                                                                                 listViewPostsRecord.postComments.length.toString(),
                                                                                 style: FlutterFlowTheme.of(context).labelMedium.override(
-                                                                                      fontFamily: 'Readex Pro',
+                                                                                      font: GoogleFonts.readexPro(
+                                                                                        fontWeight: FlutterFlowTheme.of(context).labelMedium.fontWeight,
+                                                                                        fontStyle: FlutterFlowTheme.of(context).labelMedium.fontStyle,
+                                                                                      ),
                                                                                       letterSpacing: 0.0,
+                                                                                      fontWeight: FlutterFlowTheme.of(context).labelMedium.fontWeight,
+                                                                                      fontStyle: FlutterFlowTheme.of(context).labelMedium.fontStyle,
                                                                                     ),
                                                                               ),
                                                                             ),
@@ -855,7 +1113,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                         ),
                                                                       ),
                                                                       Padding(
-                                                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                        padding: EdgeInsetsDirectional.fromSTEB(
                                                                             0.0,
                                                                             0.0,
                                                                             12.0,
@@ -918,12 +1176,17 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                               },
                                                                             ),
                                                                             Padding(
-                                                                              padding: const EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 8.0, 0.0),
+                                                                              padding: EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 8.0, 0.0),
                                                                               child: Text(
                                                                                 listViewPostsRecord.postLikesDislikesTotal.toString(),
                                                                                 style: FlutterFlowTheme.of(context).labelMedium.override(
-                                                                                      fontFamily: 'Readex Pro',
+                                                                                      font: GoogleFonts.readexPro(
+                                                                                        fontWeight: FlutterFlowTheme.of(context).labelMedium.fontWeight,
+                                                                                        fontStyle: FlutterFlowTheme.of(context).labelMedium.fontStyle,
+                                                                                      ),
                                                                                       letterSpacing: 0.0,
+                                                                                      fontWeight: FlutterFlowTheme.of(context).labelMedium.fontWeight,
+                                                                                      fontStyle: FlutterFlowTheme.of(context).labelMedium.fontStyle,
                                                                                     ),
                                                                               ),
                                                                             ),
@@ -983,7 +1246,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                         ),
                                                                       ),
                                                                       Padding(
-                                                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                        padding: EdgeInsetsDirectional.fromSTEB(
                                                                             0.0,
                                                                             0.0,
                                                                             12.0,
@@ -994,7 +1257,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                               MainAxisSize.max,
                                                                           children: [
                                                                             Padding(
-                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              padding: EdgeInsets.all(8.0),
                                                                               child: Icon(
                                                                                 Icons.bookmark_border,
                                                                                 color: FlutterFlowTheme.of(context).secondaryText,
@@ -1005,7 +1268,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                         ),
                                                                       ),
                                                                       Padding(
-                                                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                        padding: EdgeInsetsDirectional.fromSTEB(
                                                                             0.0,
                                                                             0.0,
                                                                             12.0,
@@ -1016,7 +1279,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                               MainAxisSize.max,
                                                                           children: [
                                                                             Padding(
-                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              padding: EdgeInsets.all(8.0),
                                                                               child: Icon(
                                                                                 Icons.ios_share,
                                                                                 color: FlutterFlowTheme.of(context).secondaryText,
@@ -1089,6 +1352,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                           List<PostsRecord>
                                               listViewPostsRecordList =
                                               snapshot.data!;
+
                                           return ListView.builder(
                                             padding: EdgeInsets.zero,
                                             shrinkWrap: true,
@@ -1101,7 +1365,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                   listViewPostsRecordList[
                                                       listViewIndex];
                                               return Padding(
-                                                padding: const EdgeInsetsDirectional
+                                                padding: EdgeInsetsDirectional
                                                     .fromSTEB(
                                                         0.0, 0.0, 0.0, 24.0),
                                                 child: StreamBuilder<
@@ -1151,6 +1415,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                             ? socialPost2UsersRecordList
                                                                 .first
                                                             : null;
+
                                                     return Container(
                                                       width: double.infinity,
                                                       decoration: BoxDecoration(
@@ -1163,7 +1428,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                             color: FlutterFlowTheme
                                                                     .of(context)
                                                                 .primaryBackground,
-                                                            offset: const Offset(
+                                                            offset: Offset(
                                                               0.0,
                                                               1.0,
                                                             ),
@@ -1172,7 +1437,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                       ),
                                                       child: Padding(
                                                         padding:
-                                                            const EdgeInsets.all(4.0),
+                                                            EdgeInsets.all(4.0),
                                                         child: InkWell(
                                                           splashColor: Colors
                                                               .transparent,
@@ -1184,7 +1449,8 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                               .transparent,
                                                           onTap: () async {
                                                             context.pushNamed(
-                                                              'viewingPost',
+                                                              ViewingPostWidget
+                                                                  .routeName,
                                                               queryParameters: {
                                                                 'specificPost':
                                                                     serializeParam(
@@ -1203,7 +1469,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                             children: [
                                                               Padding(
                                                                 padding:
-                                                                    const EdgeInsetsDirectional
+                                                                    EdgeInsetsDirectional
                                                                         .fromSTEB(
                                                                             8.0,
                                                                             8.0,
@@ -1250,7 +1516,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                               allowRotation: false,
                                                                               tag: valueOrDefault<String>(
                                                                                 socialPost2UsersRecord?.photoUrl,
-                                                                                'https://cdn-icons-png.flaticon.com/128/1077/1077114.png' '$listViewIndex',
+                                                                                'https://cdn-icons-png.flaticon.com/128/1077/1077114.png' + '$listViewIndex',
                                                                               ),
                                                                               useHeroAnimation: true,
                                                                             ),
@@ -1263,7 +1529,8 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                             String>(
                                                                           socialPost2UsersRecord
                                                                               ?.photoUrl,
-                                                                          'https://cdn-icons-png.flaticon.com/128/1077/1077114.png' '$listViewIndex',
+                                                                          'https://cdn-icons-png.flaticon.com/128/1077/1077114.png' +
+                                                                              '$listViewIndex',
                                                                         ),
                                                                         transitionOnUserGestures:
                                                                             true,
@@ -1276,7 +1543,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                           clipBehavior:
                                                                               Clip.antiAlias,
                                                                           decoration:
-                                                                              const BoxDecoration(
+                                                                              BoxDecoration(
                                                                             shape:
                                                                                 BoxShape.circle,
                                                                           ),
@@ -1293,7 +1560,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                       ),
                                                                     ),
                                                                     Padding(
-                                                                      padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                      padding: EdgeInsetsDirectional.fromSTEB(
                                                                           12.0,
                                                                           4.0,
                                                                           0.0,
@@ -1311,8 +1578,13 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                               'username',
                                                                             ),
                                                                             style: FlutterFlowTheme.of(context).bodyLarge.override(
-                                                                                  fontFamily: 'Readex Pro',
+                                                                                  font: GoogleFonts.readexPro(
+                                                                                    fontWeight: FlutterFlowTheme.of(context).bodyLarge.fontWeight,
+                                                                                    fontStyle: FlutterFlowTheme.of(context).bodyLarge.fontStyle,
+                                                                                  ),
                                                                                   letterSpacing: 0.0,
+                                                                                  fontWeight: FlutterFlowTheme.of(context).bodyLarge.fontWeight,
+                                                                                  fontStyle: FlutterFlowTheme.of(context).bodyLarge.fontStyle,
                                                                                 ),
                                                                           ),
                                                                           RichText(
@@ -1323,15 +1595,20 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                               children: [
                                                                                 TextSpan(
                                                                                   text: valueOrDefault<String>(
-                                                                                    listViewPostsRecord.postCreationDateTime?.toString(),
+                                                                                    dateTimeFormat("relative", listViewPostsRecord.postCreationDateTime),
                                                                                     '0',
                                                                                   ),
-                                                                                  style: const TextStyle(),
+                                                                                  style: TextStyle(),
                                                                                 )
                                                                               ],
                                                                               style: FlutterFlowTheme.of(context).labelSmall.override(
-                                                                                    fontFamily: 'Readex Pro',
+                                                                                    font: GoogleFonts.readexPro(
+                                                                                      fontWeight: FlutterFlowTheme.of(context).labelSmall.fontWeight,
+                                                                                      fontStyle: FlutterFlowTheme.of(context).labelSmall.fontStyle,
+                                                                                    ),
                                                                                     letterSpacing: 0.0,
+                                                                                    fontWeight: FlutterFlowTheme.of(context).labelSmall.fontWeight,
+                                                                                    fontStyle: FlutterFlowTheme.of(context).labelSmall.fontStyle,
                                                                                   ),
                                                                             ),
                                                                           ),
@@ -1343,7 +1620,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                               ),
                                                               Padding(
                                                                 padding:
-                                                                    const EdgeInsetsDirectional
+                                                                    EdgeInsetsDirectional
                                                                         .fromSTEB(
                                                                             8.0,
                                                                             0.0,
@@ -1358,7 +1635,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                           .start,
                                                                   children: [
                                                                     Padding(
-                                                                      padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                      padding: EdgeInsetsDirectional.fromSTEB(
                                                                           0.0,
                                                                           4.0,
                                                                           4.0,
@@ -1370,8 +1647,13 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                         style: FlutterFlowTheme.of(context)
                                                                             .bodyLarge
                                                                             .override(
-                                                                              fontFamily: 'Readex Pro',
+                                                                              font: GoogleFonts.readexPro(
+                                                                                fontWeight: FlutterFlowTheme.of(context).bodyLarge.fontWeight,
+                                                                                fontStyle: FlutterFlowTheme.of(context).bodyLarge.fontStyle,
+                                                                              ),
                                                                               letterSpacing: 0.0,
+                                                                              fontWeight: FlutterFlowTheme.of(context).bodyLarge.fontWeight,
+                                                                              fontStyle: FlutterFlowTheme.of(context).bodyLarge.fontStyle,
                                                                             ),
                                                                       ),
                                                                     ),
@@ -1394,7 +1676,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                         ),
                                                                       ),
                                                                     Padding(
-                                                                      padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                      padding: EdgeInsetsDirectional.fromSTEB(
                                                                           4.0,
                                                                           8.0,
                                                                           4.0,
@@ -1407,7 +1689,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                             MainAxisAlignment.spaceAround,
                                                                         children: [
                                                                           Padding(
-                                                                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                            padding: EdgeInsetsDirectional.fromSTEB(
                                                                                 0.0,
                                                                                 0.0,
                                                                                 12.0,
@@ -1417,7 +1699,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                               mainAxisSize: MainAxisSize.max,
                                                                               children: [
                                                                                 Padding(
-                                                                                  padding: const EdgeInsetsDirectional.fromSTEB(8.0, 8.0, 0.0, 8.0),
+                                                                                  padding: EdgeInsetsDirectional.fromSTEB(8.0, 8.0, 0.0, 8.0),
                                                                                   child: Icon(
                                                                                     Icons.mode_comment_outlined,
                                                                                     color: FlutterFlowTheme.of(context).secondaryText,
@@ -1425,12 +1707,17 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                                   ),
                                                                                 ),
                                                                                 Padding(
-                                                                                  padding: const EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 8.0, 0.0),
+                                                                                  padding: EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 8.0, 0.0),
                                                                                   child: Text(
                                                                                     listViewPostsRecord.postComments.length.toString(),
                                                                                     style: FlutterFlowTheme.of(context).labelMedium.override(
-                                                                                          fontFamily: 'Readex Pro',
+                                                                                          font: GoogleFonts.readexPro(
+                                                                                            fontWeight: FlutterFlowTheme.of(context).labelMedium.fontWeight,
+                                                                                            fontStyle: FlutterFlowTheme.of(context).labelMedium.fontStyle,
+                                                                                          ),
                                                                                           letterSpacing: 0.0,
+                                                                                          fontWeight: FlutterFlowTheme.of(context).labelMedium.fontWeight,
+                                                                                          fontStyle: FlutterFlowTheme.of(context).labelMedium.fontStyle,
                                                                                         ),
                                                                                   ),
                                                                                 ),
@@ -1438,7 +1725,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                             ),
                                                                           ),
                                                                           Padding(
-                                                                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                            padding: EdgeInsetsDirectional.fromSTEB(
                                                                                 0.0,
                                                                                 0.0,
                                                                                 12.0,
@@ -1500,12 +1787,17 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                                   },
                                                                                 ),
                                                                                 Padding(
-                                                                                  padding: const EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 8.0, 0.0),
+                                                                                  padding: EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 8.0, 0.0),
                                                                                   child: Text(
                                                                                     listViewPostsRecord.postLikesDislikesTotal.toString(),
                                                                                     style: FlutterFlowTheme.of(context).labelMedium.override(
-                                                                                          fontFamily: 'Readex Pro',
+                                                                                          font: GoogleFonts.readexPro(
+                                                                                            fontWeight: FlutterFlowTheme.of(context).labelMedium.fontWeight,
+                                                                                            fontStyle: FlutterFlowTheme.of(context).labelMedium.fontStyle,
+                                                                                          ),
                                                                                           letterSpacing: 0.0,
+                                                                                          fontWeight: FlutterFlowTheme.of(context).labelMedium.fontWeight,
+                                                                                          fontStyle: FlutterFlowTheme.of(context).labelMedium.fontStyle,
                                                                                         ),
                                                                                   ),
                                                                                 ),
@@ -1565,7 +1857,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                             ),
                                                                           ),
                                                                           Padding(
-                                                                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                            padding: EdgeInsetsDirectional.fromSTEB(
                                                                                 0.0,
                                                                                 0.0,
                                                                                 12.0,
@@ -1575,7 +1867,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                               mainAxisSize: MainAxisSize.max,
                                                                               children: [
                                                                                 Padding(
-                                                                                  padding: const EdgeInsets.all(8.0),
+                                                                                  padding: EdgeInsets.all(8.0),
                                                                                   child: Icon(
                                                                                     Icons.bookmark_border,
                                                                                     color: FlutterFlowTheme.of(context).secondaryText,
@@ -1586,7 +1878,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                             ),
                                                                           ),
                                                                           Padding(
-                                                                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                                                            padding: EdgeInsetsDirectional.fromSTEB(
                                                                                 0.0,
                                                                                 0.0,
                                                                                 12.0,
@@ -1596,7 +1888,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                                               mainAxisSize: MainAxisSize.max,
                                                                               children: [
                                                                                 Padding(
-                                                                                  padding: const EdgeInsets.all(8.0),
+                                                                                  padding: EdgeInsets.all(8.0),
                                                                                   child: Icon(
                                                                                     Icons.ios_share,
                                                                                     color: FlutterFlowTheme.of(context).secondaryText,
